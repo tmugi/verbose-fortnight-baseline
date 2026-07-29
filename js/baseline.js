@@ -24,7 +24,9 @@ function scenarioNight(n,sc,bb,mb){
 }
 function makeResident(s,sc){return{...s,history:Array.from({length:14},()=>normalNight(s)),tonight:scenarioNight(normalNight(s),sc,s.bathBase,s.motionBase),battery:s.room===117?12:Math.round(rnd(55,100))};}
 function simulate(r){
- const roll=Math.random();const sc=roll<0.10?"uti":roll<0.20?"restless":roll<0.27?"isolated":null;
+ // Incidence per resident per night. Tuned so an 80 bed community sees a
+ // handful of flags each morning, not a wall of them.
+ const roll=Math.random();const sc=roll<0.03?"uti":roll<0.055?"restless":roll<0.07?"isolated":null;
  const history=[...r.history.slice(1),r.tonight];
  return{...r,history,tonight:scenarioNight(normalNight(r),sc,avg(history.map(h=>h.bath)),avg(history.map(h=>h.motion))),battery:Math.max(5,r.battery-Math.round(rnd(0,2)))};
 }
@@ -41,7 +43,9 @@ function score(r){
  if(r.tonight.roomHours>=24)flags.push({id:"iso-"+r.room,kind:"Isolation Tracker",level:"yellow",
   msg:Math.round(r.tonight.roomHours)+" hours without leaving the room. May indicate low mood or unreported pain.",
   action:"Wellness check before lunch. Note mood and appetite."});
- const risk=Math.min(5,1+flags.reduce((n,f)=>n+(f.level==="red"?2:1),0));
+ // 1 = within baseline, 4 = multiple concurrent changes. Every level is
+ // reachable, so the number means something.
+ const risk=Math.min(4,1+flags.reduce((n,f)=>n+(f.level==="red"?2:1),0));
  return{...r,bathBase:bb,motionBase:mb,flags,risk};
 }
 
@@ -111,7 +115,7 @@ function renderHuddle(flagged,clear){
  h+='<div style="display:grid;gap:14px">'+flagged.map(r=>
   '<div class="card clickable rescard" role="button" tabindex="0" data-act="open-res" data-room="'+r.room+'">'
   +'<div class="reshead">'+avatar(r,40)
-  +'<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:16.5px">'+r.name+'</div><div class="mono" style="font-size:11.5px;color:var(--ink-soft)">Room '+r.room+' · risk '+r.risk+'/5</div></div>'
+  +'<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:16.5px">'+r.name+'</div><div class="mono" style="font-size:11.5px;color:var(--ink-soft)">Room '+r.room+' · risk '+r.risk+'/4</div></div>'
   +minispark(r,true)+'</div>'
   +r.flags.map(f=>flagChip(r,f)).join("")+'</div>').join("")+'</div>';
  h+='<div class="seclabel" style="margin-top:28px">Within baseline</div><div class="card" style="overflow:hidden">'
@@ -145,7 +149,7 @@ function renderSensors(){
 function renderDetail(r){
  let h='<button data-act="back" style=""background:none;border:none;color:var(--pine);font-weight:600;font-size:13.5px;cursor:pointer;padding:0;margin-bottom:14px;font-family:inherit">← Back</button>';
  h+='<div class="card" style="padding:18px;display:flex;gap:14px;align-items:center;margin-bottom:14px">'+avatar(r,52)
-  +'<div style="flex:1"><div class="serif" style="font-size:22px">'+r.name+'</div><div class="mono" style="font-size:12px;color:var(--ink-soft)">Room '+r.room+' · monitored 14+ nights · risk '+r.risk+'/5</div></div>'
+  +'<div style="flex:1"><div class="serif" style="font-size:22px">'+r.name+'</div><div class="mono" style="font-size:12px;color:var(--ink-soft)">Room '+r.room+' · monitored 14+ nights · risk '+r.risk+'/4</div></div>'
   +minispark(r,r.flags.length>0)+'</div>';
  if(r.flags.length)h+='<div style="margin-bottom:14px">'+r.flags.map(f=>flagChip(r,f)).join("")+'</div>';
  h+='<div class="card" style="padding:18px;margin-bottom:14px"><div style="font-weight:600;font-size:13.5px;margin-bottom:12px">Last night, minute by minute</div><div class="tl">'
