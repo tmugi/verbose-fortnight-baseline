@@ -14,77 +14,77 @@ const last=r=>r.name.split(" ")[1];
 const SEEDS=[
  {name:"Eleanor Jones",room:114,age:84,bathBase:1.5,motionBase:11,roomBase:6,hue:28,
   care:"Assisted living",since:"2023",mobility:"Walker",
-  conditions:["Hypertension","Mild cognitive impairment","Osteoarthritis"],
+  conditions:["On file with care team"],
   chronotype:"Early riser. Typically asleep by 9:45 PM, up by 6:15 AM.",
   social:"Common room most mornings. Rarely misses a meal in the dining hall.",
   events:[
-   {d:"Jun 14",type:"resolved",t:"UTI flagged from bathroom frequency, confirmed by nurse and treated. Caught 2 days before visible symptoms."},
-   {d:"Apr 02",type:"note",t:"Family reported mild evening confusion. Care team added evening check in."},
-   {d:"Feb 21",type:"incident",t:"Fall in bathroom, no injury. A restlessness flag had fired that same morning."}],
-  priors:["Prior UTI (Jun 2026)","Prior fall, no injury (Feb 2026)"],
-  watch:"Bathroom frequency and evening restlessness. A prior UTI raises the chance of recurrence over the next 90 days."},
+   {d:"Jun 14",type:"resolved",t:"Bathroom activity deviation flagged. Reviewed by nurse, resolved same week."},
+   {d:"Apr 02",type:"note",t:"Family raised a concern about evenings. Care team added an evening check in."},
+   {d:"Feb 21",type:"incident",t:"Fall in bathroom, no injury. A restlessness deviation had been flagged that same morning."}],
+  priors:["Prior flagged deviation (Jun 2026)","Prior fall, no injury (Feb 2026)"],
+  watch:"Bathroom frequency and evening restlessness. Care team has noted a prior episode in June."},
  {name:"Walter Smith",room:108,age:79,bathBase:2.0,motionBase:14,roomBase:8,hue:160,
   care:"Assisted living",since:"2024",mobility:"Cane",
-  conditions:["Type 2 diabetes","Sleep apnea (untreated)","BPH"],
+  conditions:["On file with care team"],
   chronotype:"Night owl. Rarely settles before 11:30 PM. Light sleeper.",
   social:"Keeps to himself mornings. Regular at the 2 PM card table.",
   events:[
    {d:"Jul 08",type:"system",t:"Baseline recalibrated after new mattress changed his motion signature."},
-   {d:"May 19",type:"resolved",t:"Restlessness flags for 3 straight nights. Nurse review linked it to new medication timing. Adjusted, pattern resolved."}],
-  priors:["Recurrent poor sleep stretches","Medication timing sensitivity"],
-  watch:"Clustered restlessness after any medication change. His fall risk rises the morning after a fragmented night."},
+   {d:"May 19",type:"resolved",t:"Restlessness flagged 3 nights running. Nurse review linked it to a medication timing change. Adjusted, pattern resolved."}],
+  priors:["Recurrent poor sleep stretches","Sensitive to medication timing, per care team"],
+  watch:"Clustered restlessness after any medication change, per care team note."},
  {name:"Rosa Garcia",room:121,age:88,bathBase:1.0,motionBase:9,roomBase:10,hue:320,
   care:"Assisted living",since:"2022",mobility:"Independent",
-  conditions:["Depression (managed)","Hearing loss","Osteoporosis"],
+  conditions:["On file with care team"],
   chronotype:"Consistent sleeper, 10 PM to 6 AM, few interruptions.",
-  social:"Social patterns vary with mood. Withdrawal episodes noted twice this year.",
+  social:"Social patterns vary. Care team noted two withdrawn stretches this year.",
   events:[
-   {d:"Mar 30",type:"resolved",t:"Isolation flag after 26 hours in room. Wellness check found untreated foot pain. Podiatry referral made."},
-   {d:"Jan 12",type:"note",t:"Daughter moved out of state. Care team noted mood dip and increased room time for 2 weeks."}],
-  priors:["Two withdrawal episodes (2026)","Osteoporosis raises injury severity if a fall occurs"],
-  watch:"Room time trend. For Rosa, isolation flags have twice pointed to something physical, not just mood."},
+   {d:"Mar 30",type:"resolved",t:"Extended room time flagged at 26 hours. Staff visit found a physical cause. Referral made by care team."},
+   {d:"Jan 12",type:"note",t:"Daughter moved out of state. Care team noted more room time for about 2 weeks."}],
+  priors:["Two withdrawn stretches logged (2026)"],
+  watch:"Room time trend. Care team has twice found a physical cause behind extended room time."},
  {name:"Harold Chen",room:102,age:76,bathBase:2.5,motionBase:16,roomBase:5,hue:200,
   care:"Assisted living",since:"2025",mobility:"Independent",
-  conditions:["Atrial fibrillation","Mild hypertension"],
+  conditions:["On file with care team"],
   chronotype:"Active sleeper. Higher motion at night is normal for Harold.",
   social:"Walks the courtyard twice daily. High activity is his baseline.",
   events:[{d:"Feb 04",type:"note",t:"Admitted Jan 2025. Baseline established in 26 nights."}],
   priors:["None logged"],
-  watch:"Any drop in daytime activity. For a highly active resident, slowing down is the early signal."},
+  watch:"Any drop in daytime activity. For a highly active resident, slowing down is the early change."},
  {name:"Margaret Okafor",room:117,age:91,bathBase:1.0,motionBase:8,roomBase:7,hue:90,
   care:"Assisted living · high acuity",since:"2021",mobility:"Walker",
-  conditions:["CHF (stable)","Chronic kidney disease","Arthritis"],
+  conditions:["On file with care team"],
   chronotype:"Long sleeper, 9 PM to 7 AM. Low overnight motion.",
   social:"Mornings in the garden room. Family visits Sundays.",
   events:[
-   {d:"May 27",type:"resolved",t:"Bathroom frequency flag. Nurse assessment ruled out UTI, linked to diuretic adjustment."},
-   {d:"Mar 08",type:"incident",t:"ER visit for fluid overload. Returned after 3 days. Baseline paused and rebuilt."}],
-  priors:["CHF hospitalization (Mar 2026)","Age 91 raises fall injury severity"],
-  watch:"At 91 with CHF, small changes matter sooner. Her alert thresholds are set tighter than standard."},
+   {d:"May 27",type:"resolved",t:"Bathroom activity flagged. Nurse review linked it to a medication adjustment."},
+   {d:"Mar 08",type:"incident",t:"Hospital visit. Returned after 3 days. Baseline paused and rebuilt."}],
+  priors:["Hospital stay logged (Mar 2026)","Tighter thresholds set by care team"],
+  watch:"Care team has set tighter thresholds for this resident."},
  {name:"Frank DiMarco",room:105,age:81,bathBase:3.0,motionBase:18,roomBase:9,hue:250,
   care:"Assisted living",since:"2023",mobility:"Cane",
-  conditions:["BPH","GERD","Anxiety"],
+  conditions:["On file with care team"],
   chronotype:"Frequent bathroom trips are his normal. Baseline reflects it.",
   social:"Dining hall regular. Evening TV in the common room.",
   events:[{d:"Apr 22",type:"note",t:"3 nightly bathroom visits is normal for Frank. Thresholds are set against his baseline, so he is not over flagged."}],
   priors:["High but stable nighttime frequency"],
-  watch:"His baseline is 3 visits a night, so his UTI trigger sits near 5. Personal baselines prevent false alarms for residents like Frank."},
+  watch:"Baseline is 3 visits a night, so the trigger sits near 5. Personal baselines prevent false alarms for residents like Frank."},
  {name:"Alma Petersen",room:126,age:86,bathBase:1.5,motionBase:10,roomBase:12,hue:10,
   care:"Assisted living",since:"2024",mobility:"Walker",
-  conditions:["Parkinson's (early)","Hypothyroidism"],
+  conditions:["On file with care team"],
   chronotype:"Settles late, wakes early. Averages under 7 hours.",
   social:"Prefers her room. Longer room time is normal for Alma, so her isolation threshold is extended.",
   events:[{d:"Jun 02",type:"system",t:"Isolation threshold extended to 30 hours to match her documented preference for time in her room."}],
-  priors:["Parkinson's progression is the key long term fall factor"],
-  watch:"Overnight motion trend. Early Parkinson's can show up as gradually rising restlessness months before daytime changes."},
+  priors:["Extended room time is normal for this resident"],
+  watch:"Overnight motion trend. Isolation threshold extended to 30 hours per care team note."},
  {name:"George Whitfield",room:111,age:77,bathBase:2.0,motionBase:13,roomBase:6,hue:130,
   care:"Assisted living",since:"2025",mobility:"Independent",
-  conditions:["COPD (mild)","Hyperlipidemia"],
+  conditions:["On file with care team"],
   chronotype:"Steady 10:30 PM to 6:30 AM. Reliable rhythms.",
   social:"Morning coffee group. Volunteers at the library cart.",
   events:[{d:"Jul 15",type:"note",t:"Six months of clean baselines. One of the steadiest patterns on the wing."}],
   priors:["None logged"],
-  watch:"COPD means a restless stretch in winter months deserves a respiratory check, not just a fatigue note."},
+  watch:"Care team has flagged winter respiratory checks after any restless stretch."},
 ];
 
 /* ============ night generation: realistic variance + rhythm ============ */
@@ -97,7 +97,7 @@ function normalNight(s,i){
  return{bath,motion,roomHours:Math.max(1,rnd(s.roomBase-2,s.roomBase+2)),times:motionTimes(motion,null),sleep};
 }
 function scenarioNight(n,sc,bb,mb){
- if(sc==="uti"){const bath=Math.round(bb+rnd(2.5,4));return{...n,bath,sleep:clamp(n.sleep-10,50,97),times:motionTimes(n.motion,[23,29])};}
+ if(sc==="bath"){const bath=Math.round(bb+rnd(2.5,4));return{...n,bath,sleep:clamp(n.sleep-10,50,97),times:motionTimes(n.motion,[23,29])};}
  if(sc==="restless"){const motion=Math.round(mb*rnd(1.8,2.4));return{...n,motion,sleep:clamp(88-(motion-mb)*2.4,50,97),times:motionTimes(motion,[26,28])};}
  if(sc==="isolated")return{...n,roomHours:rnd(24,31)};
  return n;
@@ -106,10 +106,20 @@ function makeResident(s,sc){
  const history=Array.from({length:30},(_,i)=>normalNight(s,i));
  return{...s,history,tonight:scenarioNight(normalNight(s,30),sc,s.bathBase,s.motionBase),battery:s.room===117?12:irnd(55,100)};
 }
+/* Scripted opening week, then a low random rate.
+   day is the night about to be generated (incremented after simulate runs). */
+function scenarioFor(r){
+ const nextDay=day+1;
+ if(nextDay===2||nextDay===3||nextDay===5)return null;          /* quiet */
+ if(nextDay===4)return r.room===108?"restless":null;            /* one restlessness */
+ if(nextDay===6)return r.room===114?"bath":null;                /* one bathroom activity */
+ const roll=Math.random();
+ return roll<0.015?"bath":roll<0.04?"restless":roll<0.05?"isolated":null;
+}
 function simulate(r){
- // Incidence per resident per night. Tuned so an 80 bed community sees a
- // handful of flags each morning, not a wall of them.
- const roll=Math.random();const sc=roll<0.03?"uti":roll<0.055?"restless":roll<0.07?"isolated":null;
+ // Days 2 to 6 follow a scripted sequence so a prospect clicking through sees
+ // quiet mornings before a catch. Day 7 onward reverts to a low random rate.
+ const sc=scenarioFor(r);
  const history=[...r.history.slice(1),r.tonight];
  return{...r,history,tonight:scenarioNight(normalNight(r,30+day),sc,avg(history.map(h=>h.bath)),avg(history.map(h=>h.motion))),battery:Math.max(5,r.battery-irnd(0,2))};
 }
@@ -120,27 +130,27 @@ function score(r){
  const bb=Math.round(avg(recent.map(h=>h.bath))*10)/10;
  const mb=Math.round(avg(recent.map(h=>h.motion)));
  const flags=[];
- if(r.tonight.bath>bb+2)flags.push({id:"uti-"+r.room,kind:"UTI Predictor",level:"red",
-  msg:r.tonight.bath+" bathroom visits last night. "+first(r)+"'s normal is "+bb+". A sudden frequency increase is the leading early sign of a UTI.",
-  action:"Nurse assessment this morning. Dip test if symptomatic.",
-  conf:"Pattern confidence: high · 30 night baseline · age "+r.age});
- if(r.tonight.motion>mb*1.5)flags.push({id:"rest-"+r.room,kind:"Restlessness Index",level:"yellow",
-  msg:r.tonight.motion+" motion events overnight. Normal is "+mb+". Poor sleep raises fall risk today"+(r.age>=85?", and at "+r.age+" a fall carries higher injury risk":"")+".",
-  action:"Prioritize at morning rounds. Assist transfers.",
-  conf:"Pattern confidence: high · sleep score "+r.tonight.sleep+"/100"});
- if(r.tonight.roomHours>=24)flags.push({id:"iso-"+r.room,kind:"Isolation Tracker",level:"yellow",
-  msg:Math.round(r.tonight.roomHours)+" hours without leaving the room. May indicate low mood or unreported pain.",
-  action:"Wellness check before lunch. Note mood and appetite.",
-  conf:"Pattern confidence: medium · threshold personalized"});
+  if(r.tonight.bath>bb+2)flags.push({id:"bath-"+r.room,kind:"Bathroom Activity",level:"red",
+  msg:r.tonight.bath+" bathroom visits overnight. "+first(r)+"'s 14 day baseline is "+bb+".",
+  action:"Flagged for wellness review.",
+  conf:"Deviation confidence: high · 30 night baseline"});
+ if(r.tonight.motion>mb*1.5)flags.push({id:"rest-"+r.room,kind:"Overnight Restlessness",level:"yellow",
+  msg:r.tonight.motion+" motion events overnight. Baseline is "+mb+". Sleep score "+r.tonight.sleep+" of 100.",
+  action:"Flagged for morning huddle.",
+  conf:"Deviation confidence: high · 30 night baseline"});
+ if(r.tonight.roomHours>=24)flags.push({id:"iso-"+r.room,kind:"Extended Time in Room",level:"yellow",
+  msg:Math.round(r.tonight.roomHours)+" hours without a room exit. Threshold is personalized to this resident.",
+  action:"Flagged for staff visit.",
+  conf:"Deviation confidence: medium · threshold personalized"});
  let risk=1+flags.reduce((n,f)=>n+(f.level==="red"?2:1),0);
- if(flags.length&&r.age>=85)risk+=1;                 /* age adjustment */
+ if(flags.length&&r.age>=85)risk+=1;
  risk=Math.min(5,risk);
  const trend7=avg(r.history.slice(-7).map(h=>h.sleep))-avg(r.history.slice(-21,-7).map(h=>h.sleep));
  return{...r,bathBase:bb,motionBase:mb,flags,risk,trend7};
 }
 
 /* ============ state ============ */
-let residents=SEEDS.map((s,i)=>makeResident(s,i===0?"uti":i===1?"restless":i===2?"isolated":null));
+let residents=SEEDS.map((s,i)=>makeResident(s,i===0?"bath":i===1?"restless":i===2?"isolated":null));
 let day=1,page="huddle",selectedRoom=null,profTab="overview",acks={};
 let clockMin=6*60,feedItems=[{t:"06:00",room:null,text:"Morning Huddle Report generated"}];
 const FEED=[{text:"Motion · bedroom"},{text:"Motion · bathroom"},{text:"Door · opened"},{text:"Door · closed"}];
@@ -151,7 +161,7 @@ function scoredAll(){return residents.map(score).sort((a,b)=>b.risk-a.risk);}
 /* ============ SVG chart builders ============ */
 let gid=0;
 function lineChart(o){
- /* o: {vals, mean, band, color, unit, label, hot} — smooth area line with baseline band */
+ /* o: {vals, mean, band, color, unit, label, hot}. Smooth area line with baseline band. */
  const W=560,H=140,P=8;gid++;
  const all=[...o.vals,o.mean+o.band,o.mean-o.band];
  let lo=Math.min(...all),hi=Math.max(...all);
@@ -188,7 +198,7 @@ function miniLine(vals,color,w,h){
 }
 function riskRing(risk){
  const p=risk*20;const c=risk>=4?"var(--red)":risk>=2?"var(--alert)":"var(--ok)";
- return '<div class="riskring" style="--p:'+p+';--rc:'+c+'" title="Risk '+risk+' of 5"><div>'+risk+'</div></div>';
+ return '<div class="riskring" style="--p:'+p+';--rc:'+c+'" title="Deviation score '+risk+' of 5"><div>'+risk+'</div></div>';
 }
 function avatarHtml(r,size){const ini=r.name.split(" ").map(w=>w[0]).join("");
  return '<div class="avatar" style="width:'+size+'px;height:'+size+'px;background:hsl('+r.hue+' 32% 86%);color:hsl('+r.hue+' 35% 30%);font-size:'+Math.round(size*0.34)+'px">'+ini+'</div>';}
@@ -196,10 +206,10 @@ function flagChip(f){
  const key=day+"-"+f.id;const at=acks[key];
  return '<div class="fchip '+f.level+(at?' acked':'')+'">'
   +'<div class="frow"><span class="fk">'+(f.level==="red"?"Red":"Yellow")+' · '+f.kind+'</span>'
-  +(at?'<span class="ackdone">✓ checked '+at+'</span>'
+  +(at?'<span class="ackdone">✓ checked '+at.at+' · '+at.mins+' min response</span>'
       :'<button class="ackbtn" data-act="ack" data-id="'+f.id+'">Mark checked</button>')
   +'</div><div class="fm">'+f.msg+'</div>'
-  +(at?'':'<div class="fa"><b>Do:</b> '+f.action+'</div><div class="fc">'+f.conf+'</div>')+'</div>';
+  +(at?'':'<div class="fa">'+f.action+'</div><div class="fc">'+f.conf+'</div>')+'</div>';
 }
 
 /* ============ renderers ============ */
@@ -210,28 +220,61 @@ function render(){
  const low=residents.filter(r=>r.battery<20).length;
  const sel=selectedRoom?scored.find(r=>r.room===selectedRoom):null;
 
- ["huddle","residents","floor","sensors"].forEach(p=>$("nav-"+p).classList.toggle("active",page===p&&!sel));
+ ["huddle","residents","floor","sensors","calibration"].forEach(p=>$("nav-"+p).classList.toggle("active",page===p&&!sel));
  $("flagbadge").style.display=open?"inline":"none";$("flagbadge").textContent=open;
  $("crumb").textContent="Willow Creek · East Wing";
  $("dateline").textContent="Day "+day+" · report generated 06:00";
- $("pagetitle").textContent=sel?sel.name:(page==="huddle"?"Morning Huddle Report":page==="residents"?"Residents":page==="floor"?"Floor view":"Sensor health");
+ $("pagetitle").textContent=sel?sel.name:(page==="huddle"?"Morning Huddle Report":page==="residents"?"Residents":page==="floor"?"Floor view":page==="sensors"?"Sensor health":"Calibration");
 
  if(sel){$("main").innerHTML=renderProfile(sel);return;}
  if(page==="huddle")$("main").innerHTML=renderHuddle(scored,flagged,open,low);
  else if(page==="residents")$("main").innerHTML=renderResidents(scored);
  else if(page==="floor")$("main").innerHTML=renderFloor(scored);
- else $("main").innerHTML=renderSensors();
+ else if(page==="sensors")$("main").innerHTML=renderSensors();
+ else $("main").innerHTML=renderCalibration();
+}
+
+/* Illustrative pilot rollout, not driven by the demo day counter.
+   Shows how alerts are switched on one type at a time and tuned weekly. */
+function renderCalibration(){
+ const rows=[
+  ["Bathroom Activity","Live","Week 5"],
+  ["Overnight Restlessness","Live","Week 7"],
+  ["Extended Time in Room","Silent","Week 9, scheduled"]
+ ];
+ const usefulness=[62,71,78,84,88,92];
+ return '<div class="seclabel">Alert status · pilot week 8</div>'
+  +'<div class="card" style="overflow:hidden;margin-bottom:18px">'
+  +rows.map(function(r){
+     var live=r[1]==="Live";
+     return '<div class="rowitem"><div style="flex:1"><div style="font-weight:600;font-size:15px">'+r[0]+'</div>'
+      +'<div class="mono" style="font-size:11px;color:var(--ink-soft)">activated '+r[2]+'</div></div>'
+      +'<span class="rw '+(live?"lo":"med")+'">'+r[1]+'</span></div>';
+   }).join("")
+  +'</div>'
+  +'<div class="two-col"><div class="panel"><h4>Staff rated alert usefulness <span class="mono">by week</span></h4>'
+  +miniLine(usefulness,"#2F5148",180,46)
+  +'<div class="kv" style="margin-top:10px"><b>Week 8</b><span class="mono">'+usefulness[usefulness.length-1]+'% rated useful</span></div>'
+  +'<p style="font-size:12.5px;color:var(--ink-soft);margin-top:8px">Rated by your staff on the weekly call, not by us.</p></div>'
+  +'<div class="panel"><h4>Threshold changelog <span class="mono">most recent first</span></h4>'
+  +'<div class="evt"><span class="ed">Wk 7</span><span class="edot system"></span><span>Extended Room 126 room exit threshold to 30 hours per care team note.</span></div>'
+  +'<div class="evt"><span class="ed">Wk 6</span><span class="edot system"></span><span>Raised Room 105 bathroom threshold from 5 to 6 after staff feedback.</span></div>'
+  +'<div class="evt"><span class="ed">Wk 5</span><span class="edot note"></span><span>Bathroom Activity alerts switched on for the pilot wing.</span></div>'
+  +'<div class="evt"><span class="ed">Wk 1</span><span class="edot note"></span><span>Sensors installed. System running silent while baselines build.</span></div>'
+  +'</div></div>'
+  +'<p style="font-size:13px;color:var(--ink-soft);margin-top:16px">Alerts start silent and turn on one type at a time. Thresholds are tuned with your staff every week.</p>';
 }
 
 function renderHuddle(scored,flagged,open,low){
  const clear=scored.filter(r=>!r.flags.length);
  const wingSleep=scored.map(r=>r.history.slice(-14).map(h=>h.sleep));
  const sleepByNight=wingSleep[0].map((_,i)=>Math.round(avg(wingSleep.map(a=>a[i]))));
- const nightEvents=scored.reduce((n,r)=>n+r.tonight.motion,0);
+ const acked=Object.values(acks).filter(a=>a&&typeof a==="object");
+ const med=acked.length?Math.round(avg(acked.map(a=>a.mins))):null;
  let h='<div class="stats">'
   +'<div class="card stat"><div class="sv" style="color:'+(open?'var(--alert)':'var(--ok)')+'">'+open+'</div><div class="sl">open flags</div><div class="sd '+(open?'up':'flat')+'">'+(open?'needs review':'all clear')+'</div></div>'
   +'<div class="card stat"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="sv">'+sleepByNight[sleepByNight.length-1]+'</div><div class="sl">wing sleep score</div></div>'+miniLine(sleepByNight,"#2F5148")+'</div><div class="sd flat">14 night trend</div></div>'
-  +'<div class="card stat"><div class="sv">'+nightEvents+'</div><div class="sl">overnight motion events</div><div class="sd flat">across '+scored.length+' residents</div></div>'
+  +'<div class="card stat"><div class="sv" style="color:'+(med!==null?'var(--ok-t)':'var(--ink-soft)')+'">'+(med!==null?med+' min':'n/a')+'</div><div class="sl">median response time</div><div class="sd flat">'+(med!==null?acked.length+' event'+(acked.length>1?'s':'')+' acknowledged':'no events acknowledged yet')+'</div></div>'
   +'<div class="card stat"><div class="sv" style="color:'+(low?'var(--alert)':'var(--ok)')+'">'+(scored.length*3-low)+'/'+(scored.length*3)+'</div><div class="sl">sensors online</div><div class="sd '+(low?'up':'flat')+'">'+(low?low+' low battery':'healthy')+'</div></div></div>';
 
  h+='<div class="seclabel">'+(flagged.length?("Needs attention · "+flagged.length+" resident"+(flagged.length>1?"s":"")):"All quiet overnight")+'</div>';
@@ -254,7 +297,7 @@ function renderHuddle(scored,flagged,open,low){
 }
 
 function renderResidents(scored){
- return '<div class="seclabel">All residents · sorted by risk</div><div class="card" style="overflow:hidden">'
+ return '<div class="seclabel">All residents · sorted by deviation score</div><div class="card" style="overflow:hidden">'
   +scored.map(r=>'<div class="rowitem clickable" role="button" tabindex="0" data-act="open-res" data-room="'+r.room+'">'
   +avatarHtml(r,36)
   +'<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:14.5px">'+r.name+'</div><div class="mono" style="font-size:10.5px;color:var(--ink-soft)">'+r.age+' · RM '+r.room+' · '+r.mobility+'</div></div>'
@@ -296,7 +339,7 @@ function renderProfile(r){
   +'<div style="flex:1;min-width:220px"><div class="serif" style="font-size:24px">'+r.name+'</div>'
   +'<div class="prof-meta mono" style="font-size:11.5px">Age '+r.age+' · Room '+r.room+' · '+r.care+' · Resident since '+r.since+'</div>'
   +'<div class="chips">'+r.conditions.map(c=>'<span class="chip">'+c+'</span>').join("")+'<span class="chip">'+r.mobility+'</span></div></div>'
-  +'<div style="text-align:center">'+riskRing(r.risk)+'<div class="mono" style="font-size:10px;color:var(--ink-soft);margin-top:4px">risk · age adjusted</div></div>'
+  +'<div style="text-align:center">'+riskRing(r.risk)+'<div class="mono" style="font-size:10px;color:var(--ink-soft);margin-top:4px">deviation score</div></div>'
   +'</div>';
  h+='<div class="tabs">'
   +'<button class="tab'+(profTab==="overview"?" active":"")+'" data-act="set-tab" data-tab="overview">Overnight</button>'
@@ -316,21 +359,61 @@ function profOverview(r){
  h+='<div class="panel" style="margin-bottom:14px"><h4>Last night, minute by minute <span class="mono">'+r.tonight.motion+' motion events · '+r.tonight.bath+' bathroom visits</span></h4><div class="tl">'
   +r.tonight.times.map(t=>'<i style="left:'+(((t-22)/8)*100)+'%"></i>').join("")
   +'</div><div class="tl-x"><span>10 PM</span><span>12 AM</span><span>2 AM</span><span>4 AM</span><span>6 AM</span></div>'
-  +'<div style="font-size:12.5px;color:var(--ink-soft);margin-top:8px">Each dot is one motion event. Clusters in the small hours are what the Restlessness Index reads as a bad night.</div></div>';
+  +'<div style="font-size:12.5px;color:var(--ink-soft);margin-top:8px">Each dot is one motion event. Clusters in the small hours are what the system reads as a deviation from the personal baseline.</div></div>';
  h+='<div class="two-col"><div class="panel"><h4>Last night vs baseline</h4>'
   +'<div class="kv"><b>Bathroom visits</b><span class="mono">'+r.tonight.bath+' <span style="opacity:.6">/ '+r.bathBase+' baseline</span></span></div>'
   +'<div class="kv"><b>Motion events</b><span class="mono">'+r.tonight.motion+' <span style="opacity:.6">/ '+r.motionBase+' baseline</span></span></div>'
   +'<div class="kv"><b>Sleep score</b><span class="mono">'+r.tonight.sleep+' / 100</span></div>'
-  +'<div class="kv"><b>Time without leaving room</b><span class="mono" '+(r.tonight.roomHours>=24?'style="color:var(--red)"':'')+'>'+Math.round(r.tonight.roomHours)+' h</span></div></div>'
-  +'<div class="panel"><h4>What to watch</h4><p style="font-size:13.5px;color:var(--ink-soft);line-height:1.6">'+r.watch+'</p>'
+  +'<div class="kv"><b>Time without leaving room</b><span class="mono" '+(r.tonight.roomHours>=24?'style="color:var(--red-t)"':'')+'>'+Math.round(r.tonight.roomHours)+' h</span></div></div>'
+  +'<div class="panel"><h4>Care team watch list</h4><p style="font-size:13.5px;color:var(--ink-soft);line-height:1.6">'+r.watch+'</p>'
   +'<div style="margin-top:10px;font-size:11px" class="mono"><span style="color:var(--ink-soft)">7 night sleep trend: </span><span class="'+(r.trend7<-3?"up":"flat")+'">'+(r.trend7>0?"+":"")+Math.round(r.trend7)+' pts'+(r.trend7<-3?" · declining":"")+'</span></div></div></div>';
+ const ackedFlag=r.flags.find(function(f){return acks[day+"-"+f.id];});
+ if(ackedFlag){
+  const a=acks[day+"-"+ackedFlag.id];
+  h+='<div class="panel" style="margin-top:14px">'
+   +'<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">'
+   +'<h4 style="margin:0">Event timeline <span class="mono">exportable</span></h4>'
+   +'<button class="ackbtn" data-act="export" data-room="'+r.room+'">Export timeline</button></div>'
+   +'<div class="evt" style="margin-top:10px"><span class="ed">06:00</span><span class="edot system"></span><span>Deviation detected. '+ackedFlag.kind+'. '+ackedFlag.msg+'</span></div>'
+   +'<div class="evt"><span class="ed">06:00</span><span class="edot note"></span><span>Routed to on shift lead.</span></div>'
+   +'<div class="evt"><span class="ed">'+a.at+'</span><span class="edot resolved"></span><span>Acknowledged by staff. Response time '+a.mins+' minute'+(a.mins===1?'':'s')+'.</span></div>'
+   +'<p style="font-size:12.5px;color:var(--ink-soft);margin-top:10px">Every flagged event produces a timestamped record. Nothing is reconstructed from memory.</p></div>';
+ }
  return h;
+}
+
+/* Downloads the timeline for one resident. Real file, not a stub, so the
+   documentation claim on the marketing page is demonstrably true. */
+function exportTimeline(room){
+ const r=scoredAll().find(function(x){return x.room===room;});
+ if(!r)return;
+ const f=r.flags.find(function(x){return acks[day+"-"+x.id];});
+ const a=f?acks[day+"-"+f.id]:null;
+ const lines=[
+  "Baseline event timeline",
+  "Room "+r.room+" | Day "+day,
+  "",
+  "06:00  Deviation detected. "+(f?f.kind+". "+f.msg:"none"),
+  "06:00  Routed to on shift lead."
+ ];
+ if(a)lines.push(a.at+"  Acknowledged by staff. Response time "+a.mins+" min.");
+ lines.push("");
+ lines.push("Generated from sensor events. No video or audio exists.");
+ const blob=new Blob([lines.join("\n")],{type:"text/plain"});
+ const url=URL.createObjectURL(blob);
+ const el=document.createElement("a");
+ el.href=url;
+ el.download="baseline-timeline-room"+r.room+"-day"+day+".txt";
+ document.body.appendChild(el);
+ el.click();
+ document.body.removeChild(el);
+ URL.revokeObjectURL(url);
 }
 function profTrends(r){
  const bath=r.history.map(x=>x.bath).concat(r.tonight.bath);
  const mot=r.history.map(x=>x.motion).concat(r.tonight.motion);
  const slp=r.history.map(x=>x.sleep).concat(r.tonight.sleep);
- const hotB=r.flags.some(f=>f.id.startsWith("uti"));
+ const hotB=r.flags.some(f=>f.id.startsWith("bath"));
  const hotM=r.flags.some(f=>f.id.startsWith("rest"));
  return chartBox("Bathroom visits per night","trigger: baseline + 2",lineChart({vals:bath,mean:r.bathBase,band:Math.max(0.6,sd(bath.slice(0,-1))),color:"#2F5148",unit:"visits",hot:hotB}))
   +chartBox("Overnight motion events","trigger: baseline × 1.5",lineChart({vals:mot,mean:r.motionBase,band:Math.max(1.5,sd(mot.slice(0,-1))),color:"#2F5148",unit:"events",hot:hotM}))
@@ -343,12 +426,12 @@ function profHistory(r){
   +'<div class="kv"><b>Sleep pattern</b><span style="text-align:right;max-width:60%">'+r.chronotype+'</span></div>'
   +'<div class="kv"><b>Social pattern</b><span style="text-align:right;max-width:60%">'+r.social+'</span></div>'
   +'<div class="kv"><b>Mobility</b><span>'+r.mobility+'</span></div></div>'
-  +'<div class="panel"><h4>Risk factors <span class="mono">age adjusted</span></h4>'
+  +'<div class="panel"><h4>Care team factors <span class="mono">on file</span></h4>'
   +'<div class="rf"><span>Age '+r.age+'</span><span class="rw '+(r.age>=85?"hi":r.age>=78?"med":"lo")+'">'+(r.age>=85?"high":r.age>=78?"moderate":"low")+'</span></div>'
   +r.priors.map(p=>'<div class="rf"><span>'+p+'</span><span class="rw med">factor</span></div>').join("")
   +'<div class="rf"><span>7 night sleep trend</span><span class="rw '+(r.trend7<-3?"hi":"lo")+'">'+(r.trend7<-3?"declining":"stable")+'</span></div></div>'
   +'</div><div>'
-  +'<div class="panel"><h4>Logged events <span class="mono">most recent first</span></h4>'
+  +'<div class="panel"><h4>Care team notes <span class="mono">most recent first</span></h4>'
   +r.events.map(e=>'<div class="evt"><span class="ed">'+e.d+'</span><span class="edot '+e.type+'"></span><span>'+e.t+'</span></div>').join("")
   +'<div style="font-size:11.5px;color:var(--ink-soft);margin-top:10px" class="mono">✓ resolved flag · ● incident · system change · care note</div></div>'
   +'</div></div>';
@@ -363,7 +446,7 @@ function go(p){page=p;selectedRoom=null;render();}
 function openRes(room){selectedRoom=room;profTab="overview";render();window.scrollTo(0,0);}
 function backToList(){selectedRoom=null;render();}
 function setTab(t){profTab=t;render();}
-function ack(id){acks[day+"-"+id]=nowLabel();render();}
+function ack(id){acks[day+"-"+id]={at:nowLabel(),mins:clockMin-6*60};render();}
 function nextNight(){
   residents=residents.map(simulate);day++;selectedRoom=null;clockMin=6*60;
   feedItems=[{t:"06:00",room:null,text:"Morning Huddle Report generated"}];
@@ -384,6 +467,7 @@ function handleAction(el,ev){
     case "go":         go(el.dataset.page); break;
     case "open-res":   openRes(Number(el.dataset.room)); break;
     case "back":       backToList(); break;
+    case "export":     exportTimeline(Number(el.dataset.room)); break;
     case "set-tab":    setTab(el.dataset.tab); break;
     case "ack":        ev.stopPropagation(); ack(el.dataset.id); break;
     case "next-night": nextNight(); break;
