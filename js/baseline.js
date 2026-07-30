@@ -153,7 +153,7 @@ function score(r){
 let residents=SEEDS.map((s,i)=>makeResident(s,i===0?"bath":i===1?"restless":i===2?"isolated":null));
 let day=1,page="huddle",selectedRoom=null,profTab="overview",acks={};
 let clockMin=6*60,feedItems=[{t:"06:00",room:null,text:"Morning Huddle Report generated"}];
-const FEED=[{text:"Motion · bedroom"},{text:"Motion · bathroom"},{text:"Door · opened"},{text:"Door · closed"}];
+const FEED=[{text:"Motion detected · bedroom"},{text:"Motion detected · bathroom"},{text:"Door opened"},{text:"Door closed"}];
 
 function nowLabel(){const h=String(Math.floor(clockMin/60)).padStart(2,"0");const m=String(clockMin%60).padStart(2,"0");return h+":"+m;}
 function scoredAll(){return residents.map(score).sort((a,b)=>b.risk-a.risk);}
@@ -206,8 +206,8 @@ function flagChip(f){
  const key=day+"-"+f.id;const at=acks[key];
  return '<div class="fchip '+f.level+(at?' acked':'')+'">'
   +'<div class="frow"><span class="fk">'+(f.level==="red"?"Red":"Yellow")+' · '+f.kind+'</span>'
-  +(at?'<span class="ackdone">✓ checked '+at.at+' · '+at.mins+' min response</span>'
-      :'<button class="ackbtn" data-act="ack" data-id="'+f.id+'">Mark checked</button>')
+  +(at?'<span class="ackdone">✓ Acknowledged '+at.at+' · '+at.mins+' min response</span>'
+      :'<button class="ackbtn" data-act="ack" data-id="'+f.id+'">Acknowledge</button>')
   +'</div><div class="fm">'+f.msg+'</div>'
   +(at?'':'<div class="fa">'+f.action+'</div><div class="fc">'+f.conf+'</div>')+'</div>';
 }
@@ -234,35 +234,64 @@ function render(){
  else $("main").innerHTML=renderCalibration();
 }
 
-/* Illustrative pilot rollout, not driven by the demo day counter.
-   Shows how alerts are switched on one type at a time and tuned weekly. */
+/* Illustrative pilot rollout. Deliberately not driven by the demo day counter,
+   which represents a single night rather than a pilot week. */
 function renderCalibration(){
- const rows=[
-  ["Bathroom Activity","Live","Week 5"],
-  ["Overnight Restlessness","Live","Week 7"],
-  ["Extended Time in Room","Silent","Week 9, scheduled"]
+ const WEEK=8, TOTAL=12;
+ const alerts=[
+  {name:"Bathroom Activity", measures:"Nighttime bathroom visits against a 14 day personal baseline",
+   status:"Live", when:"Activated week 5", tone:"lo"},
+  {name:"Overnight Restlessness", measures:"Overnight motion volume and timing against a personal baseline",
+   status:"Live", when:"Activated week 7", tone:"lo"},
+  {name:"Extended Time in Room", measures:"Hours since last room exit against a per resident threshold",
+   status:"Silent", when:"Scheduled week 9", tone:"med"}
  ];
  const usefulness=[62,71,78,84,88,92];
- return '<div class="seclabel">Alert status · pilot week 8</div>'
-  +'<div class="card" style="overflow:hidden;margin-bottom:18px">'
-  +rows.map(function(r){
-     var live=r[1]==="Live";
-     return '<div class="rowitem"><div style="flex:1"><div style="font-weight:600;font-size:15px">'+r[0]+'</div>'
-      +'<div class="mono" style="font-size:11px;color:var(--ink-soft)">activated '+r[2]+'</div></div>'
-      +'<span class="rw '+(live?"lo":"med")+'">'+r[1]+'</span></div>';
-   }).join("")
+
+ let h='<div class="seclabel">Calibration · Willow Creek pilot</div>';
+
+ /* what this page is for */
+ h+='<div class="card" style="padding:20px 22px;margin-bottom:16px">'
+  +'<p style="font-size:15px;line-height:1.6;margin:0 0 14px">Alerts do not all switch on at install. Each type runs silent while it builds a baseline, then activates on its own schedule once your team is ready for it. This page shows where the pilot currently stands and every threshold change made so far.</p>'
+  +'<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">'
+  +'<div class="mono" style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)">Pilot week '+WEEK+' of '+TOTAL+'</div>'
+  +'<div style="flex:1;min-width:180px;height:7px;border-radius:99px;background:var(--line);overflow:hidden">'
+  +'<div style="width:'+Math.round(WEEK/TOTAL*100)+'%;height:100%;background:var(--pine)"></div></div>'
+  +'<div class="mono" style="font-size:11px;color:var(--ink-soft)">Review at week 12</div></div></div>';
+
+ /* alert status */
+ h+='<div class="seclabel" style="margin-top:22px">Alert types</div>'
+  +'<div class="card" style="overflow:hidden;margin-bottom:20px">'
+  +alerts.map(function(a){
+    return '<div class="rowitem" style="align-items:flex-start">'
+     +'<div style="flex:1;min-width:0">'
+     +'<div style="font-weight:600;font-size:15px">'+a.name+'</div>'
+     +'<div style="font-size:13px;color:var(--ink-soft);line-height:1.5;margin-top:2px">'+a.measures+'</div></div>'
+     +'<div style="text-align:right;flex-shrink:0">'
+     +'<span class="rw '+a.tone+'" style="font-family:\'IBM Plex Mono\',monospace;font-size:11px;border-radius:999px;padding:2px 10px;display:inline-block">'+a.status+'</span>'
+     +'<div class="mono" style="font-size:10.5px;color:var(--ink-soft);margin-top:5px">'+a.when+'</div></div></div>';
+  }).join("")
+  +'</div>';
+
+ /* usefulness + changelog */
+ h+='<div class="two-col">'
+  +'<div class="panel"><h4>Staff rated alert usefulness</h4>'
+  +'<p style="font-size:13px;color:var(--ink-soft);line-height:1.55;margin-bottom:12px">On the weekly call, your team rates what share of the previous week\u2019s alerts were worth acting on. This number is theirs, not ours.</p>'
+  +miniLine(usefulness,"#2F5148",190,48)
+  +'<div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-soft);margin-top:4px" class="mono"><span>Week 3</span><span>Week 8</span></div>'
+  +'<div class="kv" style="margin-top:10px"><b>Current</b><span class="mono" style="color:var(--ok-t)">'+usefulness[usefulness.length-1]+'% rated useful</span></div>'
+  +'<div class="kv"><b>At activation</b><span class="mono">'+usefulness[0]+'%</span></div>'
   +'</div>'
-  +'<div class="two-col"><div class="panel"><h4>Staff rated alert usefulness <span class="mono">by week</span></h4>'
-  +miniLine(usefulness,"#2F5148",180,46)
-  +'<div class="kv" style="margin-top:10px"><b>Week 8</b><span class="mono">'+usefulness[usefulness.length-1]+'% rated useful</span></div>'
-  +'<p style="font-size:12.5px;color:var(--ink-soft);margin-top:8px">Rated by your staff on the weekly call, not by us.</p></div>'
-  +'<div class="panel"><h4>Threshold changelog <span class="mono">most recent first</span></h4>'
-  +'<div class="evt"><span class="ed">Wk 7</span><span class="edot system"></span><span>Extended Room 126 room exit threshold to 30 hours per care team note.</span></div>'
-  +'<div class="evt"><span class="ed">Wk 6</span><span class="edot system"></span><span>Raised Room 105 bathroom threshold from 5 to 6 after staff feedback.</span></div>'
-  +'<div class="evt"><span class="ed">Wk 5</span><span class="edot note"></span><span>Bathroom Activity alerts switched on for the pilot wing.</span></div>'
-  +'<div class="evt"><span class="ed">Wk 1</span><span class="edot note"></span><span>Sensors installed. System running silent while baselines build.</span></div>'
+  +'<div class="panel"><h4>Threshold changes <span class="mono">most recent first</span></h4>'
+  +'<p style="font-size:13px;color:var(--ink-soft);line-height:1.55;margin-bottom:10px">Every adjustment is logged, with the reason and the week it was made.</p>'
+  +'<div class="evt"><span class="ed">Week 7</span><span class="edot system"></span><span>Room 126 room exit threshold extended to 30 hours. Care team noted longer room time is normal for this resident.</span></div>'
+  +'<div class="evt"><span class="ed">Week 6</span><span class="edot system"></span><span>Room 105 bathroom threshold raised from 5 to 6 visits after two alerts staff judged to be noise.</span></div>'
+  +'<div class="evt"><span class="ed">Week 5</span><span class="edot note"></span><span>Bathroom Activity alerts activated for the pilot wing.</span></div>'
+  +'<div class="evt"><span class="ed">Week 1</span><span class="edot note"></span><span>Sensors installed. System running silent while baselines build.</span></div>'
   +'</div></div>'
-  +'<p style="font-size:13px;color:var(--ink-soft);margin-top:16px">Alerts start silent and turn on one type at a time. Thresholds are tuned with your staff every week.</p>';
+  +'<p style="font-size:13.5px;color:var(--ink-soft);margin-top:18px;line-height:1.6">Alerts start silent and activate one type at a time. Thresholds are tuned with your staff every week, because a system nobody trusts is a system nobody reads.</p>';
+
+ return h;
 }
 
 function renderHuddle(scored,flagged,open,low){
@@ -272,13 +301,13 @@ function renderHuddle(scored,flagged,open,low){
  const acked=Object.values(acks).filter(a=>a&&typeof a==="object");
  const med=acked.length?Math.round(avg(acked.map(a=>a.mins))):null;
  let h='<div class="stats">'
-  +'<div class="card stat"><div class="sv" style="color:'+(open?'var(--alert)':'var(--ok)')+'">'+open+'</div><div class="sl">open flags</div><div class="sd '+(open?'up':'flat')+'">'+(open?'needs review':'all clear')+'</div></div>'
-  +'<div class="card stat"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="sv">'+sleepByNight[sleepByNight.length-1]+'</div><div class="sl">wing sleep score</div></div>'+miniLine(sleepByNight,"#2F5148")+'</div><div class="sd flat">14 night trend</div></div>'
+  +'<div class="card stat"><div class="sv" style="color:'+(open?'var(--alert)':'var(--ok)')+'">'+open+'</div><div class="sl">open items</div><div class="sd '+(open?'up':'flat')+'">'+(open?'awaiting review':'none open')+'</div></div>'
+  +'<div class="card stat"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="sv">'+sleepByNight[sleepByNight.length-1]+'</div><div class="sl">wing sleep index</div></div>'+miniLine(sleepByNight,"#2F5148")+'</div><div class="sd flat">14 night trend</div></div>'
   +'<div class="card stat"><div class="sv" style="color:'+(med!==null?'var(--ok-t)':'var(--ink-soft)')+'">'+(med!==null?med+' min':'n/a')+'</div><div class="sl">median response time</div><div class="sd flat">'+(med!==null?acked.length+' event'+(acked.length>1?'s':'')+' acknowledged':'no events acknowledged yet')+'</div></div>'
-  +'<div class="card stat"><div class="sv" style="color:'+(low?'var(--alert)':'var(--ok)')+'">'+(scored.length*3-low)+'/'+(scored.length*3)+'</div><div class="sl">sensors online</div><div class="sd '+(low?'up':'flat')+'">'+(low?low+' low battery':'healthy')+'</div></div></div>';
+  +'<div class="card stat"><div class="sv" style="color:'+(low?'var(--alert)':'var(--ok)')+'">'+(scored.length*3-low)+'/'+(scored.length*3)+'</div><div class="sl">sensors reporting</div><div class="sd '+(low?'up':'flat')+'">'+(low?low+' low battery':'all reporting')+'</div></div></div>';
 
- h+='<div class="seclabel">'+(flagged.length?("Needs attention · "+flagged.length+" resident"+(flagged.length>1?"s":"")):"All quiet overnight")+'</div>';
- if(!flagged.length)h+='<div class="card" style="padding:24px;font-size:15px;color:var(--ink-soft);display:flex;gap:12px;align-items:center"><span style="width:10px;height:10px;border-radius:99px;background:var(--ok)"></span>Every resident stayed within their own baseline last night. This is what most mornings look like.</div>';
+ h+='<div class="seclabel">'+(flagged.length?("Flagged for review · "+flagged.length+" resident"+(flagged.length>1?"s":"")):"No deviations detected")+'</div>';
+ if(!flagged.length)h+='<div class="card" style="padding:24px;font-size:15px;color:var(--ink-soft);display:flex;gap:12px;align-items:center"><span style="width:10px;height:10px;border-radius:99px;background:var(--ok)"></span>All residents remained within their own baselines overnight. No items for this morning’s huddle.</div>';
  h+='<div style="display:grid;gap:14px">'+flagged.map(r=>
   '<div class="card clickable rescard" role="button" tabindex="0" data-act="open-res" data-room="'+r.room+'">'
   +'<div class="reshead">'+avatarHtml(r,44)
@@ -288,16 +317,16 @@ function renderHuddle(scored,flagged,open,low){
   +riskRing(r.risk)+'</div>'
   +'<div class="resbody">'+r.flags.map(f=>flagChip(f)).join("")+'</div></div>').join("")+'</div>';
 
- h+='<div class="seclabel" style="margin-top:28px">Within baseline</div><div class="card" style="overflow:hidden">'
+ h+='<div class="seclabel" style="margin-top:28px">No deviations · within baseline</div><div class="card" style="overflow:hidden">'
   +clear.map(r=>'<div class="rowitem clickable" role="button" tabindex="0" data-act="open-res" data-room="'+r.room+'">'
   +avatarHtml(r,30)+'<span style="font-weight:500;font-size:14.5px;flex:1">'+r.name+' <span class="mono" style="font-size:10.5px;color:var(--ink-soft)">'+r.age+'</span></span>'
   +miniLine(r.history.slice(-14).map(x=>x.sleep),"#9AA8A0")
-  +'<span class="mono" style="font-size:11.5px;color:var(--ok);width:86px;text-align:right">● baseline</span></div>').join("")+'</div>';
+  +'<span class="mono" style="font-size:11.5px;color:var(--ok-t);width:110px;text-align:right">Within baseline</span></div>').join("")+'</div>';
  return h;
 }
 
 function renderResidents(scored){
- return '<div class="seclabel">All residents · sorted by deviation score</div><div class="card" style="overflow:hidden">'
+ return '<div class="seclabel">Resident roster · sorted by deviation score</div><div class="card" style="overflow:hidden">'
   +scored.map(r=>'<div class="rowitem clickable" role="button" tabindex="0" data-act="open-res" data-room="'+r.room+'">'
   +avatarHtml(r,36)
   +'<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:14.5px">'+r.name+'</div><div class="mono" style="font-size:10.5px;color:var(--ink-soft)">'+r.age+' · RM '+r.room+' · '+r.mobility+'</div></div>'
@@ -307,28 +336,76 @@ function renderResidents(scored){
 }
 
 function renderFloor(scored){
- const st=r=>r.flags.some(f=>f.level==="red")?"r":r.flags.length?"y":"";
- const lbl=r=>r.flags.length?r.flags[0].kind.split(" ")[0].toLowerCase():"baseline";
- const col=s=>s==="r"?"var(--red)":s==="y"?"var(--alert)":"var(--ok)";
- return '<div class="seclabel">East Wing · live room status</div><div class="card" style="padding:26px"><div class="rooms-grid">'
-  +scored.slice().sort((a,b)=>a.room-b.room).map(r=>{const s=st(r);
-   return '<div class="room '+s+' clickable" role="button" tabindex="0" data-act="open-res" data-room="'+r.room+'">'
-   +'<div class="mono" style="font-size:11px;color:var(--ink-soft)">RM '+r.room+'</div>'
-   +'<div style="font-weight:600;font-size:13.5px;margin:4px 0 2px">'+r.name.split(" ")[0][0]+'. '+last(r)+'</div>'
-   +'<div class="mono" style="font-size:10px;color:var(--ink-soft);margin-bottom:5px">age '+r.age+'</div>'
-   +'<span class="mono" style="font-size:10.5px;color:'+col(s)+'">● '+lbl(r)+'</span></div>';}).join("")
-  +'</div><div style="display:flex;gap:18px;margin-top:20px;font-size:12px;color:var(--ink-soft)">'
-  +'<span><span style="color:var(--ok)">●</span> within baseline</span><span><span style="color:var(--alert)">●</span> yellow flag</span><span><span style="color:var(--red)">●</span> red flag</span></div></div>';
+ const st=function(r){return r.flags.some(function(f){return f.level==="red";})?"r":(r.flags.length?"y":"");};
+ const statusLabel=function(r){
+  if(!r.flags.length)return "Within baseline";
+  if(r.flags.length>1)return r.flags.length+" deviations";
+  return r.flags[0].kind;
+ };
+ const col=function(x){return x==="r"?"var(--red-t)":x==="y"?"#8F5D0E":"var(--ok-t)";};
+ const pill=function(x){return x==="r"?"hi":x==="y"?"med":"lo";};
+
+ const byRoom=scored.slice().sort(function(a,b){return a.room-b.room;});
+ const red=scored.filter(function(r){return r.flags.some(function(f){return f.level==="red";});}).length;
+ const yellow=scored.filter(function(r){return r.flags.length&&!r.flags.some(function(f){return f.level==="red";});}).length;
+ const clear=scored.length-red-yellow;
+ const lowBat=residents.filter(function(r){return r.battery<20;}).length;
+
+ let h='<div class="seclabel">Floor status · East Wing</div>';
+
+ /* summary strip */
+ h+='<div class="card" style="padding:16px 18px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:22px;align-items:center">'
+  +'<div><div class="mono" style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)">Rooms monitored</div>'
+  +'<div style="font-size:20px;font-weight:600">'+scored.length+'</div></div>'
+  +'<div><div class="mono" style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)">Within baseline</div>'
+  +'<div style="font-size:20px;font-weight:600;color:var(--ok-t)">'+clear+'</div></div>'
+  +'<div><div class="mono" style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)">Flagged for review</div>'
+  +'<div style="font-size:20px;font-weight:600;color:'+((red+yellow)?'#8F5D0E':'var(--ink-soft)')+'">'+(red+yellow)+'</div></div>'
+  +'<div><div class="mono" style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)">Sensors online</div>'
+  +'<div style="font-size:20px;font-weight:600;color:'+(lowBat?'#8F5D0E':'var(--ok-t)')+'">'+(scored.length*3-lowBat)+' / '+(scored.length*3)+'</div></div>'
+  +'<div style="margin-left:auto;text-align:right"><div class="mono" style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)">Last updated</div>'
+  +'<div class="mono" style="font-size:13px">'+nowLabel()+' · Day '+day+'</div></div></div>';
+
+ /* room tiles */
+ h+='<div class="card" style="padding:22px"><div class="rooms-grid">'
+  +byRoom.map(function(r){
+    const x=st(r);
+    const bathOff=r.tonight.bath-r.bathBase;
+    const detail=r.flags.length
+      ? (r.flags[0].kind==="Bathroom Activity"
+          ? r.tonight.bath+' visits · baseline '+r.bathBase
+          : r.flags[0].kind==="Overnight Restlessness"
+            ? r.tonight.motion+' events · baseline '+r.motionBase
+            : Math.round(r.tonight.roomHours)+' h without room exit')
+      : 'Sleep '+r.tonight.sleep+' · '+r.tonight.bath+' visits';
+    return '<div class="room '+x+' clickable" role="button" tabindex="0" data-act="open-res" data-room="'+r.room+'">'
+     +'<div class="mono" style="font-size:10.5px;letter-spacing:.1em;color:var(--ink-soft)">ROOM '+r.room+'</div>'
+     +'<div style="font-weight:600;font-size:14px;margin:5px 0 1px">'+first(r).charAt(0)+'. '+last(r)+'</div>'
+     +'<div class="mono" style="font-size:10px;color:var(--ink-soft);margin-bottom:8px">'+r.mobility+'</div>'
+     +'<span class="rw '+pill(x)+'" style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;border-radius:999px;padding:2px 8px;display:inline-block">'+statusLabel(r)+'</span>'
+     +'<div class="mono" style="font-size:10px;color:'+col(x)+';margin-top:7px;line-height:1.4">'+detail+'</div>'
+     +'</div>';
+  }).join("")
+  +'</div>';
+
+ /* legend */
+ h+='<div style="display:flex;flex-wrap:wrap;gap:20px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft)">'
+  +'<span><span style="color:var(--ok)">\u25cf</span> Within baseline</span>'
+  +'<span><span style="color:var(--alert)">\u25cf</span> Flagged for review</span>'
+  +'<span><span style="color:var(--red)">\u25cf</span> Flagged, priority review</span>'
+  +'<span style="margin-left:auto">Select a room for the full overnight record.</span></div></div>';
+
+ return h;
 }
 
 function renderSensors(){
- return '<div class="seclabel">Device health · 3 sensors per room (bedroom motion · bathroom motion · door)</div><div class="card" style="overflow:hidden">'
+ return '<div class="seclabel">Sensor health · three devices per room</div><div class="card" style="overflow:hidden">'
   +residents.slice().sort((a,b)=>a.room-b.room).map(r=>
    '<div class="rowitem"><span class="mono" style="width:60px;color:var(--ink-soft);font-size:12px">RM '+r.room+'</span>'
    +'<span style="flex:1;font-weight:500;font-size:14px">'+r.name+'</span>'
-   +'<span class="mono" style="font-size:12px;color:var(--ok)">3/3 online</span>'
-   +'<span class="mono" style="font-size:12px;width:100px;text-align:right;color:'+(r.battery<20?'var(--alert)':'var(--ink-soft)')+'">battery '+r.battery+'%</span></div>').join("")
-  +'</div><p style="font-size:13px;color:var(--ink-soft);margin-top:14px">Low battery sensors are flagged three weeks before they fail. Swaps happen on housekeeping rounds, never as emergencies.</p>';
+   +'<span class="mono" style="font-size:12px;color:var(--ok-t)">3 of 3 reporting</span>'
+   +'<span class="mono" style="font-size:12px;width:100px;text-align:right;color:'+(r.battery<20?'#8F5D0E':'var(--ink-soft)')+'">Battery '+r.battery+'%</span></div>').join("")
+  +'</div><p style="font-size:13px;color:var(--ink-soft);margin-top:14px">Battery levels are reported three weeks ahead of failure, so replacements are scheduled into housekeeping rounds rather than handled as emergencies.</p>';
 }
 
 /* ---- resident profile: overview | trends | profile & history ---- */
@@ -355,16 +432,16 @@ function renderProfile(r){
 function profOverview(r){
  let h="";
  if(r.flags.length)h+='<div style="margin-bottom:14px">'+r.flags.map(f=>flagChip(f)).join("")+'</div>';
- else h+='<div class="fchip" style="background:var(--ok-soft);border-left-color:var(--ok);margin-bottom:14px"><span class="fk" style="color:var(--ok)">Within baseline</span><div class="fm" style="color:var(--ink-soft)">'+first(r)+' stayed within expected ranges last night. Sleep score '+r.tonight.sleep+'/100.</div></div>';
- h+='<div class="panel" style="margin-bottom:14px"><h4>Last night, minute by minute <span class="mono">'+r.tonight.motion+' motion events · '+r.tonight.bath+' bathroom visits</span></h4><div class="tl">'
+ else h+='<div class="fchip" style="background:var(--ok-soft);border-left-color:var(--ok);margin-bottom:14px"><span class="fk" style="color:var(--ok-t)">Within baseline</span><div class="fm" style="color:var(--ink-soft)">'+first(r)+' remained within all personal baselines overnight. Sleep index '+r.tonight.sleep+' of 100.</div></div>';
+ h+='<div class="panel" style="margin-bottom:14px"><h4>Overnight motion record <span class="mono">'+r.tonight.motion+' motion events · '+r.tonight.bath+' bathroom visits</span></h4><div class="tl">'
   +r.tonight.times.map(t=>'<i style="left:'+(((t-22)/8)*100)+'%"></i>').join("")
   +'</div><div class="tl-x"><span>10 PM</span><span>12 AM</span><span>2 AM</span><span>4 AM</span><span>6 AM</span></div>'
-  +'<div style="font-size:12.5px;color:var(--ink-soft);margin-top:8px">Each dot is one motion event. Clusters in the small hours are what the system reads as a deviation from the personal baseline.</div></div>';
- h+='<div class="two-col"><div class="panel"><h4>Last night vs baseline</h4>'
+  +'<div style="font-size:12.5px;color:var(--ink-soft);margin-top:8px">Each mark is a single motion event. Clustering in the early hours is what the system measures as a deviation from this resident’s baseline.</div></div>';
+ h+='<div class="two-col"><div class="panel"><h4>Overnight summary vs baseline</h4>'
   +'<div class="kv"><b>Bathroom visits</b><span class="mono">'+r.tonight.bath+' <span style="opacity:.6">/ '+r.bathBase+' baseline</span></span></div>'
   +'<div class="kv"><b>Motion events</b><span class="mono">'+r.tonight.motion+' <span style="opacity:.6">/ '+r.motionBase+' baseline</span></span></div>'
   +'<div class="kv"><b>Sleep score</b><span class="mono">'+r.tonight.sleep+' / 100</span></div>'
-  +'<div class="kv"><b>Time without leaving room</b><span class="mono" '+(r.tonight.roomHours>=24?'style="color:var(--red-t)"':'')+'>'+Math.round(r.tonight.roomHours)+' h</span></div></div>'
+  +'<div class="kv"><b>Hours since room exit</b><span class="mono" '+(r.tonight.roomHours>=24?'style="color:var(--red-t)"':'')+'>'+Math.round(r.tonight.roomHours)+' h</span></div></div>'
   +'<div class="panel"><h4>Care team watch list</h4><p style="font-size:13.5px;color:var(--ink-soft);line-height:1.6">'+r.watch+'</p>'
   +'<div style="margin-top:10px;font-size:11px" class="mono"><span style="color:var(--ink-soft)">7 night sleep trend: </span><span class="'+(r.trend7<-3?"up":"flat")+'">'+(r.trend7>0?"+":"")+Math.round(r.trend7)+' pts'+(r.trend7<-3?" · declining":"")+'</span></div></div></div>';
  const ackedFlag=r.flags.find(function(f){return acks[day+"-"+f.id];});
